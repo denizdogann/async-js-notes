@@ -1,40 +1,13 @@
-//PROMISES
-const getTodos = (resource) => {
+// fetch api
 
-    return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
-
-        request.addEventListener('readystatechange', ()=> {
-        if (request.readyState === 4 && request.status === 200){
-            const data = JSON.parse(request.responseText)
-            resolve(data) 
-        }
-        else if(request.readyState === 4){
-            reject("coulnt fetch the data") 
-        }
-            
-        
-    })
-
-    request.open('GET', resource);
-    request.send();
-    })
-} 
-
-
-/*getTodos('https://jsonplaceholder.typicode.com/todos',(err, data)=> { //convention böyle. önce error sonra data
-    console.log("callback fired");
-    if(err){
-        console.log(err)
-    }else{
-        console.log(data)
-    }
-}) */
-
-//PROMISES
-
-getTodos('https://jsonplaceholder.typicode.com/todoss').then(data => {
-    console.log("promise resolved", data)
-}).catch(err => {
-    console.log("promise rejected", err)
+fetch("https://jsonplaceholder.typicode.com/todos").then((response)=> {
+    console.log("resolved", response);
+    return response.json();
+}).then( data => {
+    console.log(data);
+}).catch((err)=> {
+    console.log("rejected", err)
 })
+
+//const data = response.json() OLMUYOR ÇÜNKÜ RESPONSE.JSON BİR PROMISE.
+//BU YÜZDEN DİREK ONU DA RETURNE BAĞLAYIP ÜSTÜNE THEN ÇAKIYORUZ(AS IN RESOLVED)
