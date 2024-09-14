@@ -1,31 +1,40 @@
-//CALLBACK FUNCTIONS
-const getTodos = (callback) => {
-    const request = new XMLHttpRequest();
+//PROMISES
+const getTodos = (resource) => {
 
-    request.addEventListener('readystatechange', ()=> {
+    return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+
+        request.addEventListener('readystatechange', ()=> {
         if (request.readyState === 4 && request.status === 200){
             const data = JSON.parse(request.responseText)
-            callback(undefined, data) // ilk parametre error.error olmadığı için undefined.
+            resolve(data) 
         }
         else if(request.readyState === 4){
-            callback("coulnt fetch the data", undefined) //ikinci parametre data ama burda error var o yüzden return undefined
+            reject("coulnt fetch the data") 
         }
             
         
     })
 
-    request.open('GET', 'https://jsonplaceholder.typicode.com/todos');
+    request.open('GET', resource);
     request.send();
+    })
 } 
 
 
-getTodos( (err, data)=> { //convention böyle. önce error sonra data
+/*getTodos('https://jsonplaceholder.typicode.com/todos',(err, data)=> { //convention böyle. önce error sonra data
     console.log("callback fired");
     if(err){
         console.log(err)
     }else{
         console.log(data)
     }
+}) */
+
+//PROMISES
+
+getTodos('https://jsonplaceholder.typicode.com/todoss').then(data => {
+    console.log("promise resolved", data)
+}).catch(err => {
+    console.log("promise rejected", err)
 })
-
-
